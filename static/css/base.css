@@ -1,0 +1,85 @@
+body {
+    --black: #282b3a;
+    --black-secondary: #292c34;
+    --blue: #1cd5e9;
+    --pink: #f24476;
+    --white: #fff;
+    --gray: #6a6e7a;
+    --dark-gray: #32334b;
+
+
+    color: var(--white);
+    background-color: var(--black);
+}
+
+a, a:hover {
+	color: var(--white);
+}
+
+.error {
+    width: max-content;
+    background-color: var(--pink);
+    color: var(--white);
+    padding: 10px;
+}
+.success {
+    width: max-content;
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 10px;
+}
+
+.info {
+    width: max-content;
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 10px;
+}
+
+.login, .register {
+	font: 15px/1.6em Lato, serif;
+	max-width: 280px;
+	margin: 0 auto;
+	margin-top: 100px;
+    color: var(--gray);
+}
+
+.field {
+    outline: none;
+    width: max-content;
+    padding: 10px;
+    border: 2px solid var(--gray);
+    border-radius: 5px;
+    background-color: var(--black-secondary);
+    color: var(--white);
+}
+.field:focus {
+    border: 2px solid var(--pink);
+}
+
+.submit {
+    width: max-content;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--pink);
+    color: var(--white);
+}
+
+.highlight {
+    width: max-content;
+    background-color: rgba(242, 68, 118, 0.4);
+    color: var(--pink)
+}
+
+.header {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-gray);
+    color: var(--white)
+}
+
+.secondary {
+    color: var(--gray)
+}

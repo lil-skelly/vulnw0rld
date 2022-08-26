@@ -1,0 +1,19 @@
+body {
+    --black: #282b3a;
+    --black-secondary: #292c34;
+    --blue: #1cd5e9;
+    --pink: #f24476;
+    --white: #fff;
+    --gray: #6a6e7a;
+    --dark-gray: #353746;
+
+
+    color: var(--white);
+    background-color: var(--black);
+}
+
+.post {
+    width: fit-content;
+    border: 5px solid var(--dark-gray);
+    padding: 10px;
+}

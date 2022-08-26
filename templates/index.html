@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body%}
+<div class="profile">
+    {% if flag %}
+        <p class="highlight">{{ flag }}</p>
+    {% else %}
+        <h2>{{ user.name }}</h2>
+        <p class="secondary">Joined {{ user.created_at }}</p>
+    {% endif %}
+</div>
+{% for post in posts %}
+    <div class="post">
+        <h2>{{ post[0].title }}</h2>
+        <p>{{ post[0].body }}</p>
+        {% if post[1] == "Paul" %}
+            <p class="secondary">{{ post[1] }} · <span class="highlight">Admin</span></p>
+        {% else %}
+            <p class="secondary">{{ post[1] }} · {{ post[0].created_at }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+{% endblock %}

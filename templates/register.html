@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block body%}
+
+<form method="POST" action="/register" class="register">
+	<i class="fa fa-user icon"></i>
+	{{ form.username(class="field", placeholder="Username") }} <br>
+
+	<i class="fa fa-lock icon"></i>
+	{{ form.password(class="field", placeholder="Password") }} <br>
+
+	<i class="fa fa-sign-in" aria-hidden="true"></i>
+	{{ form.submit(class="submit") }} 
+	
+	<section>
+		Have an account? <a href="/login">Sign in now <span>&rarr;</span></a>
+	</section>
+</form>
+{% endblock %}

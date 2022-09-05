@@ -9,5 +9,5 @@ A few students created a blog app. Is it secure though?
   * Craft an exploit to encode the session cookie with the malicious payload
   * Bruteforce the session token
   * Send the forged cookie
-* In the messages, the user finds out the **top secret** conversation
-* Attacker discovers the ability to change his profile pic
+* Find the /admin directory
+* Login to the server

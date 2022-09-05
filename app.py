@@ -22,11 +22,12 @@ paul.post(
 """
 
 from flask import (Flask, render_template, redirect, request,
-                   session, Response,  flash)
+                   session, Response,  flash, render_template_string)
 
-from forms import (LoginForm, BioForm, RegisterForm)
+from forms import (LoginForm, RegisterForm)
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
+import werkzeug
 
 
 app = Flask(__name__)
@@ -38,24 +39,38 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['WTF_CSRF_ENABLED'] = False
 db = SQLAlchemy(app)
 
+
 class Post(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(80), unique = True)
-    body = db.Column(db.String(100), default = None)
-    created_at = db.Column(db.Integer, default = 2020)
-    author_id = db.Column(db.Integer, unique = True)
+    """
+    Blue print for a post
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), unique=True)
+    body = db.Column(db.String(100), default=None)
+    created_at = db.Column(db.Integer, default=2020)
+    author_id = db.Column(db.Integer, unique=True)
+
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(80), unique = True)
-    password = db.Column(db.String(80))
-    bio = db.Column(db.String(80), default = None)
-    created_at = db.Column(db.Integer, default = 2020)
+    """
+    Blue print for a user
 
-    def post(self, title: str, body: str, created_at: str) -> dict:
-        post = Post(title = title, body = body, created_at = created_at, author_id = self.id)
+    Methods:
+    ========
+    post: Creates a post and adds it to the database.s
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(80))
+    bio = db.Column(db.String(80), default=None)
+    created_at = db.Column(db.Integer, default=2020)
+
+    def post(self, title: str, body: str, created_at: str) -> None:
+        post = Post(title=title, body=body,
+                    created_at=created_at, author_id=self.id)
         db.session.add(post)
         db.session.commit()
+
 
 def create_user(users: list) -> list[User]:
     """
@@ -63,7 +78,7 @@ def create_user(users: list) -> list[User]:
 
     Parameters:
     ===========
-    users: list[] (default [])
+    users: list (default [])
 
     Raises:
     TypeError -- if <users> is not a list
@@ -76,6 +91,7 @@ def create_user(users: list) -> list[User]:
     db.session.commit()
     return users
 
+
 @app.before_request
 def require_login() -> Response | None:
     """
@@ -86,7 +102,10 @@ def require_login() -> Response | None:
         if not request.path.startswith('/static'):
             if request.endpoint not in allowed_routes:
                 return redirect('/register')
+    if request.endpoint == 'admin' and session['username'] != 'Paul':
+        return redirect('/')
 
+        
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -103,7 +122,8 @@ def register():
         if existing_user:
             flash('That username already exists', 'error')
         else:
-            new_user = create_user([User(name=username, password=password)])[0].first() #Get the objecct
+            new_user = create_user([User(name=username, password=password)])[
+                0]  # Get the object
             db.session.add(new_user)
             db.session.commit()
             session['username'] = new_user.name
@@ -135,10 +155,12 @@ def login():
 
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 def logout():
     del session['username']
     return redirect('/')
+
 
 @app.route('/')
 def index():
@@ -147,11 +169,21 @@ def index():
     """
     user = User.query.filter_by(name=session['username']).first()
     posts = []
-    
-    for post in db.session.query(Post):
-        posts.append((post.__dict__, User.query.filter_by(id=post.author_id).first().name))
 
-    return render_template('index.html', user=user, posts=posts, flag="v0lN{F0rg3_7h4t_C00k13}" if user.name == 'Paul' else None)
+    for index, post in enumerate(db.session.query(Post)):
+        """
+        Generates a tuple containing the post data as a dict and the author's name.
+        """
+        posts.append((post.__dict__, User.query.filter_by(
+            id=post.author_id).first().name))
+
+    return render_template('index.html', user=user, posts=posts, flag="v0lN{F0rg3_7h4t_C00k13}" if session['username'] == "Paul" else None)
+
+@app.route('/admin')
+def admin():
+    with open('./secret/id_rsa',  'r')  as f:
+        key = f.readlines()
+    return render_template('admin.html', key=key)
     
 if __name__ == '__main__':
     app.run()

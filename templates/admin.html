@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body%}
+<h3 class="highlight">Since you keep forgetting the password for the server I set up a ssh key pair for you to use.</h3>
+<h3 class="secondary">Also I have setup a simple <span class="highlight">ftp server</span>.</h3>
+
+{% for line in key %}
+    {{ line }} <br>
+{% endfor %}
+{% endblock %}

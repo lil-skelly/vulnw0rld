@@ -13,8 +13,3 @@ class RegisterForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired()])
     retype_password = PasswordField('retype_password', validators=[DataRequired()])
     submit = SubmitField('Register')
-
-class BioForm(FlaskForm):
-    #  Access self.bio 
-    bio = TextAreaField('bio', validators=[DataRequired()])
-    submit = SubmitField('Save')
